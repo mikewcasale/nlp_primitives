@@ -1,84 +1,55 @@
-# NLP Primitives
+# Predicting the rating a reviewer will give a restaurant using Featuretools and the nlp-primitives library
 
-[![CircleCI](https://circleci.com/gh/FeatureLabs/nlp_primitives.svg?style=svg&circle-token=d9f0b837238eed1f2b75be267f4963d4cb5a1284)](https://circleci.com/gh/FeatureLabs/nlp_primitives)
+<a style="margin:30px" href="https://www.featuretools.com">
+    <img width=50% src="https://www.featuretools.com/wp-content/uploads/2017/12/FeatureLabs-Logo-Tangerine-800.png" alt="Featuretools" />
+</a>
 
-nlp_primitives is a Python library with Natural Language Processing Primitives, intended for use with [Featuretools](https://github.com/Featuretools/featuretools).
+**When customers visit restaurants, they will oftentimes leave a review of some sort. Using data from TripAdvisor, we investigate how this text data can be used to predict the overall thoughts of the customer on that restuarant represented in a star rating.**
 
-nlp_primitives allows you to make use of text data in your machine learning pipeline in the same pipeline as the rest of your data.
+In this tutorial, we show how [Featuretools](https://www.featuretools.com) can be used alongside the [nlp-primitives](https://github.com/FeatureLabs/nlp_primitives) library to train an accurate machine learning model that can predict a customer's rating of a restaurant based on the text of their review and some information about the restaurant.
 
-### Install
-There are two options for installing nlp_primitives. Both of the options will also install Featuretools if it is not already installed.
+## Highlights
 
-The first option is to install a version of nlp_primitives that does not include Tensorflow. With this option, primitives that depend on Tensorflow cannot be used. Currently, the only primitive that can not be used with this install option is ``UniversalSentenceEncoder``.
+* We use the nlp-primitives library to create structured data from unstructured, hard to parse, text data
+* We acheive an accuracy rating 40% higher than the baseline
+* We use these primitives alongside Featuretools' `dfs` method to create as much information as possible from a dataset containing only two entities.
+* The `dfs` method stacks the default primitives on top of the nlp-primitives to create new, data-rich, features.
+* We build a pipeline that it can be reused for numerous NLP prediction problems (You can try this yourself!)
 
-nlp_primitives without Tensorflow can be installed with pip:
-```shell
-pip install nlp_primitives
-```
-or from the conda-forge channel on conda:
-```shell
-conda install -c conda-forge nlp-primitives
-```
+## Running the tutorial
 
-The second option is to install the complete version of nlp_primitives, which will also install Tensorflow and allow use of all primitives. 
+1. Clone the repo
 
-To install the complete version of nlp_primitives with pip:
-```shell
-pip install "nlp_primitives[complete]"
-```
-or from the conda-forge channel on conda:
-```shell
-conda install -c conda-forge nlp-primitives-complete
-```
+    ```
+    git clone 
+    ```
 
-### Demos
+2. Install the requirements
 
+    ```
+    pip install -r requirements.txt
 
-* [Blog Post](https://blog.featurelabs.com/natural-language-processing-featuretools/)
-* [Predict resturant review ratings](https://github.com/FeatureLabs/predict-restaurant-rating)
+    conda install pytorch cpuonly -c pytorch
+    ```
+    
+    
+3. Download the data
 
-## Calculating Features
-With nlp_primitives primtives in `featuretools`, this is how to calculate the same feature.
-```python
-from featuretools.nlp_primitives import PolarityScore
+    You can download the data directly from Kaggle [here](https://www.kaggle.com/jkgatt/restaurant-data-with-100-trip-advisor-reviews-each). Be sure to re-name it `reviews.json`, or change the file name in the tutorial.
 
-data = ["hello, this is a new featuretools library",
-        "this will add new natural language primitives",
-        "we hope you like it!"]
+4. Run the tutorial notebook, [Predict-Restaurant-Rating](predict-restaurant-rating.ipynb) using Jupyter
 
-pol = PolarityScore()
-pol(data)
-```
-```
-0    0.365
-1    0.385
-2    1.000
-dtype: float64
-```
-## Combining Primitives
-In `featuretools`, this is how to combine nlp_primitives primitives with built-in or other installed primitives.
-```python
-import featuretools as ft
-from featuretools.nlp_primitives import TitleWordCount
-from featuretools.primitives import Mean
+    ```
+    jupyter notebook
+    ```
 
-entityset = ft.demo.load_retail()
-feature_matrix, features = ft.dfs(entityset=entityset, target_entity='products', agg_primitives=[Mean], trans_primitives=[TitleWordCount])
-
-feature_matrix.head(5)
-```
-```
-           MEAN(order_products.quantity)  MEAN(order_products.unit_price)  MEAN(order_products.total)  TITLE_WORD_COUNT(description)
-product_id
-10002                         16.795918                          1.402500                   23.556276                           3.0
-10080                         13.857143                          0.679643                    8.989357                           3.0
-10120                          6.620690                          0.346500                    2.294069                           2.0
-10123C                         1.666667                          1.072500                    1.787500                           3.0
-10124A                           3.2000                            0.6930                      2.2176                           5.0
-```
 ## Feature Labs
 <a href="https://www.featurelabs.com/">
     <img src="http://www.featurelabs.com/wp-content/uploads/2017/12/logo.png" alt="Featuretools" />
 </a>
 
-NLP Primitives is an open source project created by [Feature Labs](https://www.featurelabs.com/). To see the other open source projects we're working on visit Feature Labs [Open Source](https://www.featurelabs.com/open). If building impactful data science pipelines is important to you or your business, please [get in touch](https://www.featurelabs.com/contact/).
+Featuretools is an open source project created by [Feature Labs](https://www.featurelabs.com/). To see the other open source projects we're working on visit Feature Labs [Open Source](https://www.featurelabs.com/open). If building impactful data science pipelines is important to you or your business, please [get in touch](https://www.featurelabs.com/contact).
+
+### Contact
+
+Any questions can be directed to help@featurelabs.com
